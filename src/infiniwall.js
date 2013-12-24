@@ -109,7 +109,7 @@ function InfiniWall (el, options) {
 	this._initialize(el,options);
 
 	// get window width
-	parentComputedProp = window.getComputedStyle(this.wall.parentNode, null)
+	parentComputedProp = window.getComputedStyle(this.inner, null)
 	this.windowWidth 		=  parseInt(parentComputedProp['width'],10);
 	this.windowHeight 	=  parseInt(parentComputedProp['height'],10);
 	// wheeel handler
@@ -133,8 +133,14 @@ InfiniWall.prototype = {
 
 
 		// change this.container if it is specified
-		el && (this.container = typeof el == 'string' ? document.querySelector(el) : el);
-		el && (this.wall = this.container.children[0])
+		if (el){
+			this.container = typeof el == 'string' ? document.querySelector(el) : el ;
+			this.inner = document.createElement('div');
+			this.inner.className = "infiniwall-inner";
+			this.container.appendChild(this.inner);
+			this.wall = document.createElement('ul');
+			this.inner.appendChild(this.wall);
+		}
 
 		el || (console.log('reinit')) 
 
@@ -154,6 +160,15 @@ InfiniWall.prototype = {
 
 		this.cellWidth = this.wall.children[0].offsetWidth;
 		this.cellHeight = this.wall.children[0].offsetHeight;
+
+		// on first init
+		if (el){
+			this.container.style.width  = 3*this.cellWidth+'px';
+			this.container.style.height = 3*this.cellHeight+'px';
+			this.container.style.overflow = 'hidden';
+			this.wall.style.top  = -this.cellHeight+'px';
+			this.wall.style.left = -this.cellWidth+'px';
+		}
 
 		pos = this._getPosition();
 		this.x = pos.x;
@@ -187,9 +202,7 @@ InfiniWall.prototype = {
 
 				this.cells[x][y].el.className = 'loading';
 				tag = document.createElement('img');
-				// tag.width = this.cellWidth;
-				// tag.height = this.cellHeight;
-				tag.onload = imgLoaded;
+				tag.onload  = imgLoaded;
 				tag.onerror = imgLoaded;
 				
 				// add mod 100 to load all images
@@ -236,19 +249,19 @@ InfiniWall.prototype = {
 		this.wheelTimeout = null;
 		this[handler] = this._bindContext(this[handler], this)
 
-		if (this.wall.parentNode.addEventListener) {
+		if (this.inner.addEventListener) {
 		  if ('onwheel' in document) {
 		    // IE9+, FF17+
-		    this.wall.parentNode.addEventListener ("wheel", this[handler], false);
+		    this.inner.addEventListener ("wheel", this[handler], false);
 		  } else if ('onmousewheel' in document) {
 		    // deprecated event variant
-		    this.wall.parentNode.addEventListener ("mousewheel", this[handler], false);
+		    this.inner.addEventListener ("mousewheel", this[handler], false);
 		  } else {
 		    // 3.5 <= Firefox < 17, omit older DOMMouseScroll event
-		    this.wall.parentNode.addEventListener ("MozMousePixelScroll", this[handler], false);
+		    this.inner.addEventListener ("MozMousePixelScroll", this[handler], false);
 		  }
 		} else { // IE<9
-		  this.wall.parentNode.attachEvent ("onmousewheel", this[handler]);
+		  this.inner.attachEvent ("onmousewheel", this[handler]);
 		}
 	},
 	/**
@@ -264,7 +277,7 @@ InfiniWall.prototype = {
 		  // wheelDelta doesn't allow to determine pixels quantity
 		  var delta = e.deltaY || e.detail || e.wheelDelta;
 
-			this.options.isFollowMouseOnScale && (this.wall.parentNode.style[transformOrigin] = e.x +'px '+ e.y + 'px');
+			this.options.isFollowMouseOnScale && (this.inner.style[transformOrigin] = e.x +'px '+ e.y + 'px');
 		  var coeff = (delta < 0) ? this.options.scaleCoeff : -this.options.scaleCoeff/3;
 			this.coeff += coeff;
 			this.coeff = (this.coeff <= 1/this.options.maxScale)? 1/this.options.maxScale: this.coeff;
@@ -522,7 +535,7 @@ InfiniWall.prototype = {
 	},
 
 	_saveScale:function () {
-		scale = parseFloat(window.getComputedStyle(this.wall.parentNode, null)[transform].replace(/[^0-9\-.,]/g, '').split(',')[0]);
+		scale = parseFloat(window.getComputedStyle(this.inner, null)[transform].replace(/[^0-9\-.,]/g, '').split(',')[0]);
 		return scale;
 	},
 
@@ -565,7 +578,7 @@ InfiniWall.prototype = {
 		// scaleMode flage is used in _end gesture function
 		this.isScale = true;
 		// scale wall wrapper
-		this.wall.parentNode.style[transform] = 'scale(' + scale*amount + ')';
+		this.inner.style[transform] = 'scale(' + scale*amount + ')';
 		// if container needs more images on scale
 		if ((scale*amount*this.wallWidth)-((this.wallWidth*scale*amount)/4) <= this.windowWidth){
 				this._initialize(null, {gridSize: this.options.gridSize + this.gridScaleStep})

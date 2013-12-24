@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>InfiniWall - Indefinitely panning layer in Javascript</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="cube.css">
 	<script src="../../src/infiniwall.js"></script>
 </head>
 
@@ -23,10 +24,18 @@ body, ul, li {
 	border: 0;
 	background-color: black;
 	font-family:  monospace;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	-ms-perspective: 1000px;
+	perspective: 1000px;
+}
+
+body{
+	padding-top: 200px;
 }
 
 
-#infiniwall {
+.infiniwall-inner {
 	margin: 0 auto;
 	position: relative;
 	-webkit-transform: translate(0px, 0px);
@@ -41,24 +50,19 @@ body, ul, li {
 	transform-origin: 0 0;
 }
 
-.window-l{
-	width: 510px;
-	height: 420px;
-	overflow: hidden;
+.infiniwall{
+	margin: 200px auto 0;
 }
 
 
 ul {
 	position: absolute;
-	top: -140px;
-	left: -170px;
 	list-style: none;
 	-webkit-transform: translate(0px, 0px) translateZ(0);
 	-moz-transform: translate(0px, 0px) translateZ(0);
 	-ms-transform: translate(0px, 0px) translateZ(0);
 	-o-transform: translate(0px, 0px) translateZ(0);
-	transform: translate(0px, 0px) translateZ(0);
-	
+	transform: translate(0px, 0px) translateZ(0);	
 }
 
 li {
@@ -72,15 +76,11 @@ li {
 	-ms-transform: translate(0px, 0px) translateZ(0);
 	-o-transform: translate(0px, 0px) translateZ(0);
 	transform: translate(0px, 0px) translateZ(0);
-	display: block;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-/*	border-right: 1px solid #000;
-	border-bottom: 1px solid #000;*/
-	/*overflow: hidden;*/
 }
 
 li > img {
@@ -97,7 +97,6 @@ li > img {
 	-ms-transform: scale(1) translateZ(0);
 	-o-transform: scale(1) translateZ(0);
 	transform: scale(1) translateZ(0);
-	/*display: block;*/
 }
 
 li.loading{
@@ -105,7 +104,6 @@ li.loading{
 }
 
 .loading > img{
-	/*display: none;*/
 	-webkit-transform: scale(0) translateZ(0);
 	-moz-transform: scale(0) translateZ(0);
 	-ms-transform: scale(0) translateZ(0);
@@ -142,115 +140,48 @@ li > span {
 	-ms-transition-duration: 0;
 	-o-transition-duration: 0;
 	transition-duration: 0;
-	/*display: none;*/
 }
-
-/*.spinner {
-	display: block;
-	position: absolute;
-	width: 40px;
-	height: 40px;
-	left: -9999px;
-	top: 50%;
-	margin-top: -35px;
-	margin-left: -20px;
-}*/
-
-/*.loading .spinner {
-	left: 50%;
-	-webkit-animation: spin 2s linear infinite;
-	-moz-animation: spin 2s linear infinite;
-	-o-animation: spin 2s linear infinite;
-	animation: spin 2s linear infinite;
-}*/
-
-/*@keyframes spin {
-	from {
-		-webkit-transform: rotate(0deg);
-		-moz-transform: rotate(0deg);
-		-ms-transform: rotate(0deg);
-		-o-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-		-moz-transform: rotate(360deg);
-		-ms-transform: rotate(360deg);
-		-o-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-@-moz-keyframes spin {
-	from {
-		-webkit-transform: rotate(0deg);
-		-moz-transform: rotate(0deg);
-		-ms-transform: rotate(0deg);
-		-o-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-		-moz-transform: rotate(360deg);
-		-ms-transform: rotate(360deg);
-		-o-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-@-webkit-keyframes spin {
-	from {
-		-webkit-transform: rotate(0deg);
-		-moz-transform: rotate(0deg);
-		-ms-transform: rotate(0deg);
-		-o-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-		-moz-transform: rotate(360deg);
-		-ms-transform: rotate(360deg);
-		-o-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}
-
-@-o-keyframes spin {
-	from {
-		-webkit-transform: rotate(0deg);
-		-moz-transform: rotate(0deg);
-		-ms-transform: rotate(0deg);
-		-o-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-		-moz-transform: rotate(360deg);
-		-ms-transform: rotate(360deg);
-		-o-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
-}*/
-
-/*.loading img {
-	left: -9999px;
-}*/
-
-
 
 
 </style>
 <body>
-	<div class="window-l">
-		<div id="infiniwall">
-			<ul>
-			</ul>
-		</div>
-	</div>
+  <div class="js-infiniwall"></div>
+
+	<!-- <div class="cube-l">
+      <div class="facet-b is-zero">
+      	<div class="js-infiniwall1"></div>
+      </div>
+      <div class="facet-b is-1">
+      	<div class="js-infiniwall2"></div>
+      </div>
+      <div class="facet-b is-2">
+      	<div class="js-infiniwall3"></div>
+      </div>
+      <div class="facet-b is-3">
+      	<div class="js-infiniwall4"></div>
+      </div>
+      <div class="facet-b is-4">
+      	<div class="js-infiniwall5"></div>
+      </div>
+      <div class="facet-b is-5">
+      	<div class="js-infiniwall6"></div>
+      </div>
+    </div> -->
+	<!-- <div class="js-infiniwall infiniwall"></div> -->
 
 <script>
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-var iw = new InfiniWall('#infiniwall');
+	document.addEventListener('DOMContentLoaded', function(){
+		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+		// why var?
+		var iw = new InfiniWall('.js-infiniwall');
+		// var iw = new InfiniWall('.js-infiniwall1');
+		// var iw = new InfiniWall('.js-infiniwall2');
+		// var iw = new InfiniWall('.js-infiniwall3');
+		// var iw = new InfiniWall('.js-infiniwall4');
+		// var iw = new InfiniWall('.js-infiniwall5');
+		// var iw = new InfiniWall('.js-infiniwall6');
+	});
+
 </script>
 
 </body>

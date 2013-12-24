@@ -1,0 +1,82 @@
+facetWidth = 510px
+facetHeight= 510px;
+shadowColor = red;
+.cube-l {
+  height 510px
+  width 510px
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -(facetWidth/2);
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  -moz-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  -ms-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  -o-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  -webkit-transform-origin 50% 50% -255px
+  -moz-transform-origin 50% 50% -255px
+  -ms-transform-origin 50% 50% -255px
+  -o-transform-origin 50% 50% -255px
+  transform-origin 50% 50% -255px
+}
+.cube-l li{
+  width: 170px;
+  height: 170px;
+}
+
+.cube-l .facet-b {
+  width: facetWidth;
+  height: facetHeight;
+  position: absolute;
+  background black
+  -webkit-filter: opacity(0.99999);
+  backface-visibility:visible;
+  -webkit-backface-visibility:visible; /* Chrome and Safari */
+  -moz-backface-visibility:visible; /* Firefox */
+  -ms-backface-visibility:visible; /* Internet Explorer */
+}
+
+.cube-l .facet-b.is-1 {
+  -webkit-transform: rotate3d(0, 1, 0, 90deg) translate3d((facetWidth/2), 0px, (facetWidth/2));
+  -moz-transform: rotate3d(0, 1, 0, 90deg) translate3d((facetWidth/2), 0px, (facetWidth/2));
+  -ms-transform: rotate3d(0, 1, 0, 90deg) translate3d((facetWidth/2), 0px, (facetWidth/2));
+  -o-transform: rotate3d(0, 1, 0, 90deg) translate3d((facetWidth/2), 0px, (facetWidth/2));
+  transform: rotate3d(0, 1, 0, 90deg) translate3d((facetWidth/2), 0px, (facetWidth/2));
+}
+
+.cube-l .facet-b.is-2 {
+  -webkit-transform: rotate3d(1, 0, 0, 90deg) translate3d(0px, -(facetHeight/2), (facetHeight/2));
+  -moz-transform: rotate3d(1, 0, 0, 90deg) translate3d(0px, -(facetHeight/2), (facetHeight/2));
+  -ms-transform: rotate3d(1, 0, 0, 90deg) translate3d(0px, -(facetHeight/2), (facetHeight/2));
+  -o-transform: rotate3d(1, 0, 0, 90deg) translate3d(0px, -(facetHeight/2), (facetHeight/2));
+  transform: rotate3d(1, 0, 0, 90deg) translate3d(0px, -(facetHeight/2), (facetHeight/2));
+}
+
+.cube-l .facet-b.is-3 {
+  -webkit-transform: rotate3d(0, 1, 0, -90deg) translate3d(-(facetWidth/2), 0px, (facetWidth/2));
+  -moz-transform: rotate3d(0, 1, 0, -90deg) translate3d(-(facetWidth/2), 0px, (facetWidth/2));
+  -ms-transform: rotate3d(0, 1, 0, -90deg) translate3d(-(facetWidth/2), 0px, (facetWidth/2));
+  -o-transform: rotate3d(0, 1, 0, -90deg) translate3d(-(facetWidth/2), 0px, (facetWidth/2));
+  transform: rotate3d(0, 1, 0, -90deg) translate3d(-(facetWidth/2), 0px, (facetWidth/2));
+}
+
+.cube-l .facet-b.is-4 {
+  -webkit-transform: rotate3d(1, 0, 0, -90deg) translate3d(0px, (facetWidth/2), (facetWidth/2));
+  -moz-transform: rotate3d(1, 0, 0, -90deg) translate3d(0px, (facetWidth/2), (facetWidth/2));
+  -ms-transform: rotate3d(1, 0, 0, -90deg) translate3d(0px, (facetWidth/2), (facetWidth/2));
+  -o-transform: rotate3d(1, 0, 0, -90deg) translate3d(0px, (facetWidth/2), (facetWidth/2));
+  transform: rotate3d(1, 0, 0, -90deg) translate3d(0px, (facetWidth/2), (facetWidth/2));
+}
+
+.cube-l .facet-b.is-5 {
+  -webkit-transform: rotateY(180deg) translate3d(0px, 0px, facetWidth);
+  -moz-transform: rotateY(180deg) translate3d(0px, 0px, facetWidth);
+  -ms-transform: rotateY(180deg) translate3d(0px, 0px, facetWidth);
+  -o-transform: rotateY(180deg) translate3d(0px, 0px, facetWidth);
+  transform: rotateY(180deg) translate3d(0px, 0px, facetWidth);
+}
+
