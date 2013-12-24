@@ -103,7 +103,7 @@ function InfiniWall (el, options) {
 																		// this option determines if we need to recalc
 																		// move interaction on scale to make it more consistant
     isFollowMouseOnScale: false,		// 
-    scaleCoeff: 					.01		  	// scale step coeff
+    scaleCoeff: 					.05		  	// scale step coeff
 	};
 	
 	this._initialize(el,options);
@@ -257,7 +257,7 @@ InfiniWall.prototype = {
 	 */
 	_onWheel:function (e) {
 			if (!e.metaKey) {return true};
-		console.log()
+		
 		  clearTimeout(this.wheelTimeout); var it = this;
 			this.wheelTimeout = setTimeout(function () { scale = it._saveScale(); it.coeff = 1; }, 50);
 		  e = e || window.event;
@@ -265,8 +265,7 @@ InfiniWall.prototype = {
 		  var delta = e.deltaY || e.detail || e.wheelDelta;
 
 			this.options.isFollowMouseOnScale && (this.wall.parentNode.style[transformOrigin] = e.x +'px '+ e.y + 'px');
-
-		  var coeff = (delta < 0) ? this.options.scaleCoeff : -this.options.scaleCoeff;
+		  var coeff = (delta < 0) ? this.options.scaleCoeff : -this.options.scaleCoeff/3;
 			this.coeff += coeff;
 			this.coeff = (this.coeff <= 1/this.options.maxScale)? 1/this.options.maxScale: this.coeff;
 			this.coeff = (this.coeff >= this.options.maxScale)? this.options.maxScale: this.coeff;
