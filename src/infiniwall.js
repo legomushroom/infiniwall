@@ -44,7 +44,8 @@ var dummyStyle = document.createElement('i').style,
 	cssVendor = vendor ? '-' + vendor.toLowerCase() + '-' : '',
 
 	// Style properties
-	transform = prefixStyle('transform'),
+	transform 			= prefixStyle('transform'),
+	transformOrigin = prefixStyle('transform-origin'),
 	transitionProperty = prefixStyle('transitionProperty'),
 	transitionDuration = prefixStyle('transitionDuration'),
 	transitionTimingFunction = prefixStyle('transitionTimingFunction'),
@@ -59,9 +60,9 @@ var dummyStyle = document.createElement('i').style,
 	isAndroid = (/android/i).test(navigator.appVersion),
 
 	resizeEv = 'onorientationchange' in window ? 'orientationchange' : 'resize',
-	startEv = hasTouch ? 'touchstart' : 'mousedown',
-	moveEv = hasTouch ? 'touchmove' : 'mousemove',
-	endEv = hasTouch ? 'touchend' : 'mouseup',
+	startEv = hasTouch ? 	'touchstart' 	: 'mousedown',
+	moveEv = hasTouch ? 	'touchmove' 	: 'mousemove',
+	endEv = hasTouch ? 		'touchend' 		: 'mouseup',
 	cancelEv = hasTouch ? 'touchcancel' : 'mouseup',
 	transitionEndEv = (function () {
 		if ( vendor === false ) return false;
@@ -96,25 +97,24 @@ function InfiniWall (el, options) {
 	// add defaults
 	this.defaults = { 
 		gridSize: 5, // grid size NxN
-		maxScale: 3, // max scale size
-		isPreserveMoveSizeOnScale: true // molly yeh. When you scale smthing
+		maxScale: 5, // max scale size
+		isPreserveMoveSizeOnScale: true,// molly yeh. When you scale smthing
 																		// with a transform, all actual sizes still the same
 																		// this option determines if we need to recalc
 																		// move interaction on scale to make it more consistant
+    isFollowMouseOnScale: false,		// 
+    scaleCoeff: 					.01		  	// scale step coeff
 	};
 	
 	this._initialize(el,options);
 
-	// [todo]
-	// get size from the DOM
-	this.windowWidth 		=  500;
-	this.windowHeight 	=  500;
+	// get window width
+	parentComputedProp = window.getComputedStyle(this.wall.parentNode, null)
+	this.windowWidth 		=  parseInt(parentComputedProp['width'],10);
+	this.windowHeight 	=  parseInt(parentComputedProp['height'],10);
+	// wheeel handler
+	this._listenToWheel('_onWheel');
 
-	// this.wall.parentNode.parentNode.style.width  = 	this.windowWidth  + 'px'
-	// this.wall.parentNode.parentNode.style.height = 	this.windowHeight + 'px'
-
-	// this.options = {};
-	// for ( i in options ) this.options[i] = options[i];
 	this._bind(startEv, this.container);
 }
 
@@ -170,10 +170,6 @@ InfiniWall.prototype = {
 		
 		this.wall.style.width  =  this.wallWidth  + 'px';
 		this.wall.style.height =  this.wallWidth 	+ 'px';
-		
-		
-
-
 		this.cells = [];
 		for (x=0; x < this.gridWidth; x++ ) {
 			this.cells[x] = [];
@@ -186,11 +182,13 @@ InfiniWall.prototype = {
 					y: 0
 				};
 				this.cells[x][y].prevSlot = this.cells[x][y].slot;
-				// this.cells[x][y].el.className = 'loading';
 
+				if ((this.cells[x][y] != null)&&(this.cells[x][y].el.firstChild != null)) {continue;};
+
+				this.cells[x][y].el.className = 'loading';
 				tag = document.createElement('img');
-				tag.width = this.cellWidth;
-				tag.height = this.cellHeight;
+				// tag.width = this.cellWidth;
+				// tag.height = this.cellHeight;
 				tag.onload = imgLoaded;
 				tag.onerror = imgLoaded;
 				
@@ -203,15 +201,79 @@ InfiniWall.prototype = {
 				this.cells[x][y].el.appendChild(tag);
 
 
-				// remove a lots of sp
+				// removes lots of spans
 
 				// tag = document.createElement('span');
 				// tag.className = 'spinner';
 				// this.cells[x][y].el.appendChild(tag);
 			}
 		}
-		
+
 	},
+
+	/**
+	 * [_bindContext function for context binding]
+	 * @param  {function} func    [source function to bind context]
+	 * @param  {object}   context [new context]
+	 * @return {function}         [carring function]
+	 */
+	_bindContext: function(func, context){
+		var bindArgs = Array.prototype.slice.call(arguments,2)
+		function wrapper(){
+			var args = Array.prototype.slice.call(arguments);
+			var unshiftArgs = bindArgs.concat(args);
+			return func.apply(context, unshiftArgs);
+		}
+		return wrapper;
+	},
+	/**
+	 * [_listenToWheel cross browser listen to mouse wheel launch function]
+	 * @param  {string} handler  [handler name for wheel event]
+	 */
+	_listenToWheel:function(handler){
+		// scale coeff
+		this.coeff = 1;
+		this.wheelTimeout = null;
+		this[handler] = this._bindContext(this[handler], this)
+
+		if (this.wall.parentNode.addEventListener) {
+		  if ('onwheel' in document) {
+		    // IE9+, FF17+
+		    this.wall.parentNode.addEventListener ("wheel", this[handler], false);
+		  } else if ('onmousewheel' in document) {
+		    // deprecated event variant
+		    this.wall.parentNode.addEventListener ("mousewheel", this[handler], false);
+		  } else {
+		    // 3.5 <= Firefox < 17, omit older DOMMouseScroll event
+		    this.wall.parentNode.addEventListener ("MozMousePixelScroll", this[handler], false);
+		  }
+		} else { // IE<9
+		  this.wall.parentNode.attachEvent ("onmousewheel", this[handler]);
+		}
+	},
+	/**
+	 * [_onWheel wheel event handler]
+	 * @param  {object/event} e [event]
+	 */
+	_onWheel:function (e) {
+			if (!e.metaKey) {return true};
+		console.log()
+		  clearTimeout(this.wheelTimeout); var it = this;
+			this.wheelTimeout = setTimeout(function () { scale = it._saveScale(); it.coeff = 1; }, 50);
+		  e = e || window.event;
+		  // wheelDelta doesn't allow to determine pixels quantity
+		  var delta = e.deltaY || e.detail || e.wheelDelta;
+
+			this.options.isFollowMouseOnScale && (this.wall.parentNode.style[transformOrigin] = e.x +'px '+ e.y + 'px');
+
+		  var coeff = (delta < 0) ? this.options.scaleCoeff : -this.options.scaleCoeff;
+			this.coeff += coeff;
+			this.coeff = (this.coeff <= 1/this.options.maxScale)? 1/this.options.maxScale: this.coeff;
+			this.coeff = (this.coeff >= this.options.maxScale)? this.options.maxScale: this.coeff;
+		  this._scale(this.coeff);
+		  e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+	},
+
 	// defaults extend function
 	_defaults:function (options, defaults) {
 		for (var key in defaults){
@@ -420,7 +482,6 @@ InfiniWall.prototype = {
 			deltaX = point.pageX - this.startX,
 			deltaY = point.pageY - this.startY;
 
-
 		// isPreserveMoveSizeOnScale implementation
 		deltaX = (this.options.isPreserveMoveSizeOnScale) ? deltaX*(1/scale) : deltaX;
 		deltaY = (this.options.isPreserveMoveSizeOnScale) ? deltaY*(1/scale) : deltaY;
@@ -434,9 +495,6 @@ InfiniWall.prototype = {
 
 		clearTimeout(this._loadTimeout);
 		this._loadTimeout = null;
-
-
-		
 
 		this.distX += Math.abs(deltaX);
 		this.distY += Math.abs(deltaY);
@@ -464,10 +522,14 @@ InfiniWall.prototype = {
 		}
 	},
 
+	_saveScale:function () {
+		scale = parseFloat(window.getComputedStyle(this.wall.parentNode, null)[transform].replace(/[^0-9\-.,]/g, '').split(',')[0]);
+		return scale;
+	},
+
 	_end: function (e) {
-		if (this.isScale){
-			this.isScale = false;
-			scale = parseFloat(window.getComputedStyle(this.wall.parentNode, null)[transform].replace(/[^0-9\-.,]/g, '').split(',')[0]);
+		if (this.isScale){this.isScale = false;
+			this._saveScale()
 		}
 		
 		if ( hasTouch && e.changedTouches.length > 1 ) return;
@@ -508,6 +570,9 @@ InfiniWall.prototype = {
 		// if container needs more images on scale
 		if ((scale*amount*this.wallWidth)-((this.wallWidth*scale*amount)/4) <= this.windowWidth){
 				this._initialize(null, {gridSize: this.options.gridSize + this.gridScaleStep})
+				// bug fixes
+				this._setPosition(0, 0);
+				this._rearrangeCells()
 			} 
 		
 	},

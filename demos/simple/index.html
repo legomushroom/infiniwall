@@ -9,50 +9,6 @@
 
 <style>
 
-/*.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-
-@-webkit-keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    transform: scale(0);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    -ms-transform: scale(0);
-    transform: scale(0);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
-.fadeInScale {
-  -webkit-animation-name: fadeInScale;
-  animation-name: fadeInScale;
-}*/
-
-
 
 * {
 	-webkit-box-sizing: border-box;
@@ -65,7 +21,8 @@ body, ul, li {
 	padding: 0;
 	margin: 0;
 	border: 0;
-	background-color: #ccc;
+	background-color: black;
+	font-family:  monospace;
 }
 
 
@@ -85,8 +42,8 @@ body, ul, li {
 }
 
 .window-l{
-	width: 400px;
-	height: 400px;
+	width: 510px;
+	height: 420px;
 	overflow: hidden;
 }
 
@@ -110,53 +67,82 @@ li {
 	float: left;
 	width: 170px;
 	height: 140px;
-	/*-webkit-transform: translate(0px, 0px) translateZ(0);
+	-webkit-transform: translate(0px, 0px) translateZ(0);
 	-moz-transform: translate(0px, 0px) translateZ(0);
 	-ms-transform: translate(0px, 0px) translateZ(0);
 	-o-transform: translate(0px, 0px) translateZ(0);
-	transform: translate(0px, 0px) translateZ(0);*/
+	transform: translate(0px, 0px) translateZ(0);
 	display: block;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	border-right: 1px solid #000;
-	border-bottom: 1px solid #000;
-	overflow: hidden;
+/*	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;*/
+	/*overflow: hidden;*/
 }
 
 li > img {
 	position: absolute;
 	height: 100%;
 	width: 100%;
-	-webkit-transition: all .5s linear;
-	-moz-transition: all .5s linear;
-	-ms-transition: all .5s linear;
-	-o-transition: all .5s linear;
-	transition: all .5s linear;
-	-webkit-transform: scale(1);
-	-moz-transform: scale(1);
-	-ms-transform: scale(1);
-	-o-transform: scale(1);
-	transform: scale(1);
+	-webkit-transition: all .25s linear;
+	-moz-transition: all .25s linear;
+	-ms-transition: all .25s linear;
+	-o-transition: all .25s linear;
+	transition: all .25s linear;
+	-webkit-transform: scale(1) translateZ(0);
+	-moz-transform: scale(1) translateZ(0);
+	-ms-transform: scale(1) translateZ(0);
+	-o-transform: scale(1) translateZ(0);
+	transform: scale(1) translateZ(0);
+	/*display: block;*/
 }
 
 li.loading{
-	background: url(images/loading.png) no-repeat center 40%;
+	background: url(images/loading.png) no-repeat center center;
 }
 
 .loading > img{
-	-webkit-transform: scale(0);
-	-moz-transform: scale(0);
-	-ms-transform: scale(0);
-	-o-transform: scale(0);
-	transform: scale(0);
+	/*display: none;*/
+	-webkit-transform: scale(0) translateZ(0);
+	-moz-transform: scale(0) translateZ(0);
+	-ms-transform: scale(0) translateZ(0);
+	-o-transform: scale(0) translateZ(0);
+	transform: scale(0) translateZ(0);
 	-webkit-transition-duration: 0;
 	-moz-transition-duration: 0;
 	-ms-transition-duration: 0;
 	-o-transition-duration: 0;
 	transition-duration: 0;
+}
+
+.loading > span{
+	opacity: 0;
+	-webkit-transition: opacity .25s linear;
+	-moz-transition: opacity .25s linear;
+	-ms-transition: opacity .25s linear;
+	-o-transition: opacity .25s linear;
+	transition: opacity .25s linear;
+}
+
+li > span {
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	width: 100%;
+	background: rgba(0,0,0,0.6);
+	color: #fff;
+	padding: 5px;
+	font-size: 12px;
+	opacity: 1;
+	-webkit-transition-duration: 0;
+	-moz-transition-duration: 0;
+	-ms-transition-duration: 0;
+	-o-transition-duration: 0;
+	transition-duration: 0;
+	/*display: none;*/
 }
 
 /*.spinner {
@@ -250,15 +236,7 @@ li.loading{
 	left: -9999px;
 }*/
 
-li span {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	background: rgba(0,0,0,0.6);
-	color: #fff;
-	padding: 5px;
-	font-size: 19px;
-}
+
 
 
 </style>
