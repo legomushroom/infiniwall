@@ -9,11 +9,11 @@
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
-  -moz-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
-  -ms-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
-  -o-transform: translateZ(0) rotateX(0deg) rotateY(20deg);
-  transform: translateZ(0) rotateX(0deg) rotateY(20deg);
+  -webkit-transform: translateZ(0) rotateX(0deg) rotateY(0);
+  -moz-transform: translateZ(0) rotateX(0deg) rotateY(0);
+  -ms-transform: translateZ(0) rotateX(0deg) rotateY(0);
+  -o-transform: translateZ(0) rotateX(0deg) rotateY(0);
+  transform: translateZ(0) rotateX(0deg) rotateY(0);
   -webkit-transform-origin: 50% 50% -255px;
   -moz-transform-origin: 50% 50% -255px;
   -ms-transform-origin: 50% 50% -255px;

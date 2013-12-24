@@ -146,6 +146,8 @@ InfiniWall.prototype = {
 
 		this.gridSize = options.gridSize;
 		var e = document.createElement('div');
+		this.cubeDeltaX = 0;
+		this.cubeDeltaY = 0;
 		// add initial cell containers
 		// if wall already has containers, sub their amount
 		// needed for reinit
@@ -168,6 +170,7 @@ InfiniWall.prototype = {
 			this.container.style.overflow = 'hidden';
 			this.wall.style.top  = -this.cellHeight+'px';
 			this.wall.style.left = -this.cellWidth+'px';
+			this.cube = $('.cube-l');
 		}
 
 		pos = this._getPosition();
@@ -429,11 +432,19 @@ InfiniWall.prototype = {
 					this.cells[x][y].el.className = '';
 				} else {
 					// add mod 100 to load all images
-					this.cells[x][y].el.children[0].src = 'images/img' + (this.cells[x][y].slot % 100) + '.jpg';
+					// and add retina images
+					this.cells[x][y].el.children[0].src = 'images/img' + (this.cells[x][y].slot % 100) + (this._isRetina()?'@2x':'') +'.jpg';
 					this.cells[x][y].prevSlot = this.cells[x][y].slot;
 				}
 			}
 		}
+	},
+	/**
+	 * [_isRetina detect retinadevice]
+	 * @return {Boolean} [is retiana]
+	 */
+	_isRetina: function(){
+  	return window.devicePixelRatio > 1;
 	},
 
 	_getPosition: function () {
@@ -490,6 +501,34 @@ InfiniWall.prototype = {
 	},
 	
 	_move: function (e) {
+		if (e.touches){
+			(!e.metaKey && (e.touches.length < 2)	&& (this._handleGridMove(e)));
+			(e.metaKey || (e.touches.length === 2)	&& (this._handleCubeMove(e)));
+		}else{
+			(!e.metaKey && (this._handleGridMove(e)));
+			(e.metaKey 	&& (this._handleCubeMove(e)));
+		}
+
+	},
+	/**
+	 * [_handleCubeMove handle cube rotation]
+	 * @param  {object/event} e [touchmove/mousemove event]
+	 */
+	_handleCubeMove:function (e) {
+		this.isCubeMove = true;
+		var point = hasTouch ? e.touches[0] : e;
+		this.deltaX = point.pageX - this.startX;
+		this.deltaY = point.pageY - this.startY;
+
+		this.deltaY = -this.deltaY;
+
+		this.cube.style[transform] = "rotateX("+(this.cubeDeltaY+this.deltaY)+"deg) "+"rotateY("+(this.cubeDeltaX+this.deltaX)+"deg)";
+	},
+	/**
+	 * [_handleGridMove handle plain grid move]
+	 * @param  {object/event} e [event]
+	 */
+	_handleGridMove: function (e) {
 		var point = hasTouch ? e.touches[0] : e,
 			deltaX = point.pageX - this.startX,
 			deltaY = point.pageY - this.startY;
@@ -534,14 +573,30 @@ InfiniWall.prototype = {
 		}
 	},
 
+
+	/**
+	 * [_saveScale save scale after touchend]
+	 * @return {float} [scale]
+	 */
 	_saveScale:function () {
 		scale = parseFloat(window.getComputedStyle(this.inner, null)[transform].replace(/[^0-9\-.,]/g, '').split(',')[0]);
 		return scale;
+	},
+	/**
+	 * [_saveCubeMove save cube transform]
+	 */
+	_saveCubeMove: function(){
+		this.cubeDeltaX = this.cubeDeltaX+this.deltaX;
+		this.cubeDeltaY = this.cubeDeltaY+this.deltaY;
 	},
 
 	_end: function (e) {
 		if (this.isScale){this.isScale = false;
 			this._saveScale()
+		}
+
+		if (this.isCubeMove){this.isCubeMove = false;
+			this._saveCubeMove()
 		}
 		
 		if ( hasTouch && e.changedTouches.length > 1 ) return;

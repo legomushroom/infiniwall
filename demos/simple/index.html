@@ -51,7 +51,7 @@ body{
 }
 
 .infiniwall{
-	margin: 200px auto 0;
+	margin: 0 auto;
 }
 
 
@@ -118,11 +118,18 @@ li.loading{
 
 .loading > span{
 	opacity: 0;
-	-webkit-transition: opacity .25s linear;
-	-moz-transition: opacity .25s linear;
-	-ms-transition: opacity .25s linear;
-	-o-transition: opacity .25s linear;
-	transition: opacity .25s linear;
+	-webkit-transition-duration: 0;
+	-moz-transition-duration: 0;
+	-ms-transition-duration: 0;
+	-o-transition-duration: 0;
+	transition-duration: 0;
+
+	-webkit-transition-delay: 0;
+	-moz-transition-delay: 0;
+	-ms-transition-delay: 0;
+	-o-transition-delay: 0;
+	transition-delay: 0;
+
 }
 
 li > span {
@@ -135,17 +142,22 @@ li > span {
 	padding: 5px;
 	font-size: 12px;
 	opacity: 1;
-	-webkit-transition-duration: 0;
-	-moz-transition-duration: 0;
-	-ms-transition-duration: 0;
-	-o-transition-duration: 0;
-	transition-duration: 0;
+	-webkit-transition: opacity .25s linear;
+	-moz-transition: opacity .25s linear;
+	-ms-transition: opacity .25s linear;
+	-o-transition: opacity .25s linear;
+	transition: opacity .25s linear;
+	-webkit-transition-delay: .25s;
+	-moz-transition-delay: .25s;
+	-ms-transition-delay: .25s;
+	-o-transition-delay: .25s;
+	transition-delay: .25s;
 }
 
 
 </style>
 <body>
-  <div class="js-infiniwall"></div>
+  <div class="js-infiniwall infiniwall"></div>
 
 	<!-- <div class="cube-l">
       <div class="facet-b is-zero">
@@ -167,13 +179,14 @@ li > span {
       	<div class="js-infiniwall6"></div>
       </div>
     </div> -->
-	<!-- <div class="js-infiniwall infiniwall"></div> -->
 
 <script>
 	document.addEventListener('DOMContentLoaded', function(){
 		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 		// why var?
 		var iw = new InfiniWall('.js-infiniwall');
+
+		
 		// var iw = new InfiniWall('.js-infiniwall1');
 		// var iw = new InfiniWall('.js-infiniwall2');
 		// var iw = new InfiniWall('.js-infiniwall3');
