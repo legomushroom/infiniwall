@@ -124,17 +124,39 @@ li {
 	border-right: 1px solid #000;
 	border-bottom: 1px solid #000;
 	overflow: hidden;
-	background: url(images/loading.png) no-repeat center 40%;
 }
 
-li img {
+li > img {
 	position: absolute;
 	height: 100%;
 	width: 100%;
+	-webkit-transition: all .5s linear;
+	-moz-transition: all .5s linear;
+	-ms-transition: all .5s linear;
+	-o-transition: all .5s linear;
+	transition: all .5s linear;
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	-ms-transform: scale(1);
+	-o-transform: scale(1);
+	transform: scale(1);
 }
 
-.loading img{
-	opacity: 0;
+li.loading{
+	background: url(images/loading.png) no-repeat center 40%;
+}
+
+.loading > img{
+	-webkit-transform: scale(0);
+	-moz-transform: scale(0);
+	-ms-transform: scale(0);
+	-o-transform: scale(0);
+	transform: scale(0);
+	-webkit-transition-duration: 0;
+	-moz-transition-duration: 0;
+	-ms-transition-duration: 0;
+	-o-transition-duration: 0;
+	transition-duration: 0;
 }
 
 /*.spinner {

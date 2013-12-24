@@ -336,7 +336,7 @@ InfiniWall.prototype = {
 					this.cells[i][l].el.children[1].innerHTML = 'Image No. ' + this.cells[i][l].slot;
 				}
 
-				this.cells[i][l].el.style[transform] = 'translate(' + this.cells[i][l].x + 'px,' + this.cells[i][l].y + 'px)';// + translateZ;
+				this.cells[i][l].el.style[transform] = 'translate(' + this.cells[i][l].x + 'px,' + this.cells[i][l].y + 'px)' + translateZ;
 			}
 		}
 
