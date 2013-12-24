@@ -331,7 +331,7 @@ InfiniWall.prototype = {
 				
 				if ( slot != this.cells[i][l].slot ) {
 					this.cells[i][l].slot = slot;
-					// this.cells[i][l].el.className = 'loading';
+					this.cells[i][l].el.className = 'loading';
 					//this.cells[i][l].el.children[0].src = 'images/img' + this.cells[i][l].slot + '.jpg';
 					this.cells[i][l].el.children[1].innerHTML = 'Image No. ' + this.cells[i][l].slot;
 				}
