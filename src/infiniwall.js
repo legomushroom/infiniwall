@@ -134,7 +134,7 @@ InfiniWall.prototype = {
 
 		// change this.container if it is specified
 		if (el){
-			this.container = typeof el == 'string' ? document.querySelector(el) : el ;
+			this.container = typeof el == 'string' ? $(el) : el ;
 			this.inner = document.createElement('div');
 			this.inner.className = "infiniwall-inner";
 			this.container.appendChild(this.inner);
@@ -148,6 +148,7 @@ InfiniWall.prototype = {
 		var e = document.createElement('div');
 		this.cubeDeltaX = 0;
 		this.cubeDeltaY = 0;
+		this.isRetina = window.devicePixelRatio > 1;
 		// add initial cell containers
 		// if wall already has containers, sub their amount
 		// needed for reinit
@@ -209,7 +210,8 @@ InfiniWall.prototype = {
 				tag.onerror = imgLoaded;
 				
 				// add mod 100 to load all images
-				tag.src = 'images/img' + (this.cells[x][y].slot % 100) + '.jpg';
+				// and add retina
+				tag.src = 'images/img' + (this.cells[x][y].slot % 100)  + (this.isRetina?'@2x':'') + '.jpg';
 				this.cells[x][y].el.appendChild(tag);
 
 				tag = document.createElement('span');
@@ -433,18 +435,15 @@ InfiniWall.prototype = {
 				} else {
 					// add mod 100 to load all images
 					// and add retina images
-					this.cells[x][y].el.children[0].src = 'images/img' + (this.cells[x][y].slot % 100) + (this._isRetina()?'@2x':'') +'.jpg';
-					this.cells[x][y].prevSlot = this.cells[x][y].slot;
+					// 
+					// console.time('load images')
+					var cell = this.cells[x][y];
+					cell.el.children[0].src = 'images/img' + (cell.slot % 100) + (this.isRetina?'@2x':'') +'.jpg';
+					cell.prevSlot = cell.slot;
+					// console.timeEnd('load images')
 				}
 			}
 		}
-	},
-	/**
-	 * [_isRetina detect retinadevice]
-	 * @return {Boolean} [is retiana]
-	 */
-	_isRetina: function(){
-  	return window.devicePixelRatio > 1;
 	},
 
 	_getPosition: function () {
@@ -529,6 +528,9 @@ InfiniWall.prototype = {
 	 * @param  {object/event} e [event]
 	 */
 	_handleGridMove: function (e) {
+		clearTimeout(this._loadTimeout);
+		// this._loadTimeout = null;
+
 		var point = hasTouch ? e.touches[0] : e,
 			deltaX = point.pageX - this.startX,
 			deltaY = point.pageY - this.startY;
@@ -543,9 +545,6 @@ InfiniWall.prototype = {
 			that = this;
 
 		if ( hasTouch && e.changedTouches.length > 1 ) return;
-
-		clearTimeout(this._loadTimeout);
-		this._loadTimeout = null;
 
 		this.distX += Math.abs(deltaX);
 		this.distY += Math.abs(deltaY);
