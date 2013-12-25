@@ -5,7 +5,6 @@
 	<title>InfiniWall - Indefinitely panning layer in Javascript</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet" href="cube.css">
-	<script src="../../src/infiniwall.js"></script>
 </head>
 
 <style>
@@ -159,7 +158,7 @@ li > span {
 <body>
   <div class="js-infiniwall infiniwall"></div>
 
-	<!-- <div class="cube-l">
+	<!-- <div class="js-cube cube-l">
       <div class="facet-b is-zero">
       	<div class="js-infiniwall1"></div>
       </div>
@@ -180,6 +179,16 @@ li > span {
       </div>
     </div> -->
 
+<script src="cube.js"></script>
+
+<!-- why the script was in head?? -->
+<script src="../../src/infiniwall.js"></script>
+
+<script>
+	new Cube({el: '.js-cube'})
+</script>
+
+
 <script>
 	document.addEventListener('DOMContentLoaded', function(){
 		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -187,13 +196,12 @@ li > span {
 		iw = new InfiniWall('.js-infiniwall');
 
 		// var iw = new InfiniWall('.js-infiniwall1');
-		// var iw = new InfiniWall('.js-infiniwall2');
-		// var iw = new InfiniWall('.js-infiniwall3');
-		// var iw = new InfiniWall('.js-infiniwall4');
-		// var iw = new InfiniWall('.js-infiniwall5');
-		// var iw = new InfiniWall('.js-infiniwall6');
+		// var iw = new InfiniWall('.js-infiniwall2', {imageBase: 'images1'});
+		// var iw = new InfiniWall('.js-infiniwall3', {imageBase: 'images2'});
+		// var iw = new InfiniWall('.js-infiniwall4', {imageBase: 'images3'});
+		// var iw = new InfiniWall('.js-infiniwall5', {imageBase: 'images4'});
+		// var iw = new InfiniWall('.js-infiniwall6', {imageBase: 'images5'});
 	});
-
 </script>
 
 </body>

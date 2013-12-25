@@ -51,7 +51,7 @@ var dummyStyle = document.createElement('i').style,
 	transitionTimingFunction = prefixStyle('transitionTimingFunction'),
 	transitionDelay = prefixStyle('transitionDelay'),
 
-    // Browser capabilities
+   // Browser capabilities
 	has3d = prefixStyle('perspective') in dummyStyle,
 	hasTouch = 'ontouchstart' in window,
 	hasTransitionEnd = prefixStyle('transition') in dummyStyle,
@@ -97,13 +97,14 @@ function InfiniWall (el, options) {
 	// add defaults
 	this.defaults = { 
 		gridSize: 5, // grid size NxN
-		maxScale: 5, // max scale size
+		maxScale: 4, // max scale size
 		isPreserveMoveSizeOnScale: true,// molly yeh. When you scale smthing
 																		// with a transform, all actual sizes still the same
 																		// this option determines if we need to recalc
 																		// move interaction on scale to make it more consistant
     isFollowMouseOnScale: false,		// 
-    scaleCoeff: 					.05		  	// scale step coeff
+    scaleCoeff: 					.05,		  // scale step coeff
+    imageBase: 						'images'
 	};
 	
 	this._initialize(el,options);
@@ -146,8 +147,6 @@ InfiniWall.prototype = {
 
 		this.gridSize = options.gridSize;
 		var e = document.createElement('div');
-		this.cubeDeltaX = 0;
-		this.cubeDeltaY = 0;
 		this.isRetina = window.devicePixelRatio > 1;
 		// add initial cell containers
 		// if wall already has containers, sub their amount
@@ -211,7 +210,7 @@ InfiniWall.prototype = {
 				
 				// add mod 100 to load all images
 				// and add retina
-				tag.src = 'images/img' + (this.cells[x][y].slot % 100)  + (this.isRetina?'@2x':'') + '.jpg';
+				tag.src = this.options.imageBase + '/img' + (this.cells[x][y].slot % 100)  + (this.isRetina?'@2x':'') + '.jpg';
 				this.cells[x][y].el.appendChild(tag);
 
 				tag = document.createElement('span');
@@ -300,7 +299,7 @@ InfiniWall.prototype = {
 	},
 
 	handleEvent: function (e) {
-		if ((e.scale !== 1)&&(e.scale != null)){ this._scale(e.scale);}
+		if ((e.scale != null)&&(e.scale !== 1)){ this._scale(e.scale); return true;}
 		switch (e.type) {
 			case startEv:
 				if ( !hasTouch && e.button !== 0 ) return;
@@ -435,12 +434,9 @@ InfiniWall.prototype = {
 				} else {
 					// add mod 100 to load all images
 					// and add retina images
-					// 
-					// console.time('load images')
 					var cell = this.cells[x][y];
-					cell.el.children[0].src = 'images/img' + (cell.slot % 100) + (this.isRetina?'@2x':'') +'.jpg';
+					cell.el.children[0].src = this.options.imageBase + '/img' + (cell.slot % 100) + (this.isRetina?'@2x':'') +'.jpg';
 					cell.prevSlot = cell.slot;
-					// console.timeEnd('load images')
 				}
 			}
 		}
@@ -500,14 +496,12 @@ InfiniWall.prototype = {
 	},
 	
 	_move: function (e) {
-		if (e.touches){
-			(!e.metaKey && (e.touches.length < 2)	&& (this._handleGridMove(e)));
-			(e.metaKey || (e.touches.length === 2)	&& (this._handleCubeMove(e)));
+		if (e.touches != null){
+			(e.touches.length === 1)	&& (this._handleGridMove(e));
 		}else{
 			(!e.metaKey && (this._handleGridMove(e)));
-			(e.metaKey 	&& (this._handleCubeMove(e)));
 		}
-
+		return true;
 	},
 	/**
 	 * [_handleCubeMove handle cube rotation]
